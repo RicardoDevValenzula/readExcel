@@ -9,7 +9,7 @@ import phonenumbers
 
 FILE_CSV = "layout_tnu.csv"
 
-ORIGIN_FILE = "origin_data.xlsx"
+ORIGIN_FILE = "Leads CRM.xlsx"
 
 
 columns = ["Area Code", "Phone", "Name", "Value",
@@ -24,7 +24,7 @@ print(f"Archivo creado con exito {FILE_CSV}")
 
 def format_phone_number(phone_str):
     """
-    SIRVE PARA DAR FORMATO A LOS NUMEROS 
+    SIRVE PARA DAR FORMATO A LOS NUMEROS
     """
 
     if pd.isna(phone_str) or not isinstance(phone_str, str):
@@ -64,7 +64,8 @@ try:
     print(df_origin.head())
 
     # Aplicar la sanitizcion de numeros:
-    phone_data = df_origin["Telefono"].astype(str).apply(format_phone_number)
+    phone_data = df_origin["Numero con lada"].astype(
+        str).apply(format_phone_number)
     df_origin["Area Code"], df_origin["Phone"] = zip(*phone_data)
 
     df_mapeado = pd.DataFrame({
@@ -73,7 +74,7 @@ try:
         "Name": df_origin["Nombre"],
         "Value": "",  # Asignar valor predeterminado 0
         "Email": df_origin["Correo"],
-        "Tags":  df_origin.apply(lambda row: ", ".join(filter(None, [str(row["Programa"]) if pd.notna(row["Programa"]) else "", str(row["Campaña"]) if pd.notna(row["Campaña"]) else ""])), axis=1),
+        "Tags":  df_origin.apply(lambda row: ", ".join(filter(None, [str(row["Sigla"]) if pd.notna(row["Sigla"]) else "", str(row["Campaña"]) if pd.notna(row["Campaña"]) else ""])), axis=1),
         "Company": df_origin.iloc[:, 6],  # Valor fijo para la compañía
         "Assignee": df_origin.iloc[:, 5]
     })
